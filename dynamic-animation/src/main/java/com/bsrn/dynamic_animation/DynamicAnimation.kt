@@ -4,6 +4,7 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -19,6 +20,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 
 enum class IconState {
@@ -31,7 +34,8 @@ fun DynamicAnimation(
     onClick: () -> Unit = {},
     startValue: Float = 16f,
     endValue: Float = 32f,
-    fillColor: Color = Color.Red
+    fillColor: Color = Color.Red,
+    strokeColor: Color = Color.Red
 ) {
     var iconState by remember { mutableStateOf(IconState.DEFAULT) }
     val sizeAnim = remember { Animatable(16f) }
@@ -64,7 +68,10 @@ fun DynamicAnimation(
                 collapseIcon()
             }
             onClick()
-        }
+        },
+        modifier = Modifier
+            .size(max(sizeAnim.value.dp, (startValue * 6).dp))
+            .zIndex(1f)
     ) {
         Canvas(modifier = Modifier.size(sizeAnim.value.dp)) {
             val scaleFactor = sizeAnim.value / 8f
@@ -86,8 +93,8 @@ fun DynamicAnimation(
                 // Draw the stroke
                 drawPath(
                     path = iconPath,
-                    color = Color.Red,
-                    style = Stroke(width = 2f)
+                    color = strokeColor,
+                    style = Stroke(width = 1f)
                 )
             }
         }

@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     implementation(project(":dynamic-animation"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
