@@ -21,8 +21,8 @@ DynamicAnimation(
 )
 ```
 
-###Features
-**Customizable Vector Graphics: Easily animate any vector graphic defined by path data or use drawable resources for your animations.**
-**Flexible Design: Adjust the size, fill color, and stroke color to fit the theme and purpose of your app.**
-**Interactive: Optionally, add click actions to make the animated icons interactive.**
-**Minimalistic Approach: Designed to integrate seamlessly with Jetpack Compose, promoting cleaner code and enhancing development productivity.**
+### Features
+- **Customizable Vector Graphics: Easily animate any vector graphic defined by path data or use drawable resources for your animations.**
+- **Flexible Design: Adjust the size, fill color, and stroke color to fit the theme and purpose of your app.**
+- **Interactive: Optionally, add click actions to make the animated icons interactive.**
+- **Minimalistic Approach: Designed to integrate seamlessly with Jetpack Compose, promoting cleaner code and enhancing development productivity.**
