@@ -7,7 +7,9 @@
 - The goal of this project is to offer Android app developers an accessible means to incorporate engaging Jetpack Compose animations into their user interfaces.
 
 **How To Use?**
-- For DynamicAnimationWithPath : To utilize the DynamicAnimation component, you need to specify the path data of the vector graphic or drawable you wish to animate, along with desired start and end sizes, and fill and stroke colors. 
+- For DynamicAnimationWithPath : To utilize the DynamicAnimation component, you need to specify the path data of the vector graphic or drawable you wish to animate, along with desired start and end sizes, and fill and stroke colors.
+- 
+![GIF1](https://i.ibb.co/vx1HbCC/Screen-recording-20240227-191730-ezgif-com-resize.gif)
 
 ```kotlin
 DynamicAnimation(
