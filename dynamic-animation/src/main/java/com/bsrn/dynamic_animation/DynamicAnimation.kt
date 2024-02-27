@@ -4,7 +4,6 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -30,72 +29,51 @@ enum class IconState {
 
 @Composable
 fun DynamicAnimation(
+    modifier: Modifier,
     iconPathData: String,
-    onClick: () -> Unit = {},
     startValue: Float = 16f,
     endValue: Float = 32f,
     fillColor: Color = Color.Red,
-    strokeColor: Color = Color.Red
-) {
+    strokeColor: Color = Color.Red,
+ ) {
     var iconState by remember { mutableStateOf(IconState.DEFAULT) }
-    val sizeAnim = remember { Animatable(16f) }
-    val fillColorAnim = remember { Animatable(Color.Transparent) }
-    val scope = rememberCoroutineScope()
-    val iconPath = remember { PathParser().parsePathString(iconPathData).toPath() }
-
-    fun expandIcon() {
-        scope.launch {
-            fillColorAnim.animateTo(fillColor, tween(durationMillis = 100))
-            sizeAnim.animateTo(endValue, tween(durationMillis = 500))
-            iconState = IconState.EXPANDED
-            sizeAnim.animateTo(startValue, tween(durationMillis = 500))
-        }
-    }
-
-    fun collapseIcon() {
-        scope.launch {
-            fillColorAnim.animateTo(Color.Transparent, tween(durationMillis = 100))
-            sizeAnim.animateTo(startValue, tween(durationMillis = 500))
-            iconState = IconState.DEFAULT
-        }
-    }
+    val animatableSize = remember { Animatable(startValue) }
+    val animatableFillColor = remember { Animatable(Color.Transparent) }
+    val iconPath = remember(iconPathData) { PathParser().parsePathString(iconPathData).toPath() }
+    val coroutineScope = rememberCoroutineScope()
 
     IconButton(
         onClick = {
-            if (iconState == IconState.DEFAULT) {
-                expandIcon()
-            } else {
-                collapseIcon()
+            coroutineScope.launch {
+                if (iconState == IconState.DEFAULT) {
+                    animatableFillColor.animateTo(fillColor, tween(durationMillis = 100))
+                    animatableSize.animateTo(endValue, tween(durationMillis = 500))
+                    iconState = IconState.EXPANDED
+                    // Ensure the icon returns to its default size after expanding
+                    animatableSize.animateTo(startValue, tween(durationMillis = 500))
+                } else {
+                    animatableFillColor.animateTo(Color.Transparent, tween(durationMillis = 100))
+                    animatableSize.animateTo(startValue, tween(durationMillis = 500))
+                    iconState = IconState.DEFAULT
+                }
             }
-            onClick()
         },
-        modifier = Modifier
-            .size(max(sizeAnim.value.dp, (startValue * 6).dp))
+        modifier = modifier
+            .size(max(animatableSize.value.dp, (startValue * 6).dp))
             .zIndex(1f)
     ) {
-        Canvas(modifier = Modifier.size(sizeAnim.value.dp)) {
-            val scaleFactor = sizeAnim.value / 8f
+        Canvas(modifier = Modifier.size(animatableSize.value.dp)) {
+            val scaleFactor = animatableSize.value / 8f
             val iconBounds = iconPath.getBounds()
             val pivot = Offset(
                 iconBounds.left + iconBounds.width / 2,
                 iconBounds.top + iconBounds.height / 2
             )
-
             withTransform({
-                scale(scaleFactor, scaleFactor, pivot = pivot)
+                scale(scaleFactor, scaleFactor, pivot)
             }) {
-                // Draw the fill color
-                drawPath(
-                    path = iconPath,
-                    color = fillColorAnim.value
-                )
-
-                // Draw the stroke
-                drawPath(
-                    path = iconPath,
-                    color = strokeColor,
-                    style = Stroke(width = 1f)
-                )
+                drawPath(path = iconPath, color = animatableFillColor.value)
+                drawPath(path = iconPath, color = strokeColor, style = Stroke(width = 1f))
             }
         }
     }
