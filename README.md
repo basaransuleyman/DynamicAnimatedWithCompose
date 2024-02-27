@@ -1,12 +1,12 @@
-# Native Android Animation with Jetpack Compose #DynamicAnimation
+# Native Android Animation with Jetpack Compose - DynamicAnimation
 
-**About The Project
+** About The Project
 This project introduces a customizable animation component, DynamicAnimation, created using Android Jetpack Compose. It allows developers to generate animated icons based on vector graphics (path data) or drawable resources. Designed to empower Android native animations, the component provides flexibility over key properties such as icon size, fill color, and stroke color, enabling dynamic visual effects within user interfaces.
 
-**Purpose
+** Purpose
 The goal of this project is to offer Android app developers an accessible means to incorporate engaging Jetpack Compose animations into their user interfaces.
 
-**How To Use?
+** How To Use?
 To utilize the DynamicAnimation component, you need to specify the path data of the vector graphic or drawable you wish to animate, along with desired start and end sizes, and fill and stroke colors. 
 
 ```kotlin
@@ -21,7 +21,7 @@ DynamicAnimation(
 )
 ```
 
-**Features
+** Features
 Customizable Vector Graphics: Easily animate any vector graphic defined by path data or use drawable resources for your animations.
 Flexible Design: Adjust the size, fill color, and stroke color to fit the theme and purpose of your app.
 Interactive: Optionally, add click actions to make the animated icons interactive.
