@@ -1,6 +1,7 @@
 # Native Android Animation with Jetpack Compose - DynamicAnimations
 
 ![GIF1](https://i.ibb.co/zh7QLz2/Screen-recording-20240227-135713-ezgif-com-resize.gif)
+
 ![GIF2](https://i.ibb.co/vx1HbCC/Screen-recording-20240227-191730-ezgif-com-resize.gif)
 
 **About The Project**
