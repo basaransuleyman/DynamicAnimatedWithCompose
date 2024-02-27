@@ -31,6 +31,7 @@ enum class IconState {
 fun DynamicAnimation(
     modifier: Modifier,
     iconPathData: String,
+    onClick: () -> Unit = {},
     startValue: Float = 16f,
     endValue: Float = 32f,
     fillColor: Color = Color.Red,
@@ -57,6 +58,7 @@ fun DynamicAnimation(
                     iconState = IconState.DEFAULT
                 }
             }
+            onClick()
         },
         modifier = modifier
             .size(max(animatableSize.value.dp, (startValue * 6).dp))
