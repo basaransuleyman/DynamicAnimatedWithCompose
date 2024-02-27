@@ -1,9 +1,11 @@
 package com.bsrn.dynamic_animation
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -18,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.vector.PathParser
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.zIndex
@@ -28,14 +31,14 @@ enum class IconState {
 }
 
 @Composable
-fun DynamicAnimation(
-    modifier: Modifier,
+fun DynamicAnimationWithPath(
     iconPathData: String,
     onClick: () -> Unit = {},
     startValue: Float = 16f,
     endValue: Float = 32f,
     fillColor: Color = Color.Red,
     strokeColor: Color = Color.Red,
+    modifier: Modifier,
  ) {
     var iconState by remember { mutableStateOf(IconState.DEFAULT) }
     val animatableSize = remember { Animatable(startValue) }
@@ -71,6 +74,7 @@ fun DynamicAnimation(
                 iconBounds.left + iconBounds.width / 2,
                 iconBounds.top + iconBounds.height / 2
             )
+
             withTransform({
                 scale(scaleFactor, scaleFactor, pivot)
             }) {
@@ -78,5 +82,43 @@ fun DynamicAnimation(
                 drawPath(path = iconPath, color = strokeColor, style = Stroke(width = 1f))
             }
         }
+    }
+}
+
+@Composable
+fun DynamicAnimationWithDrawable(
+    modifier: Modifier = Modifier,
+    @DrawableRes iconDrawable: Int,
+    onClick: () -> Unit = {},
+    startValue: Float = 16f,
+    endValue: Float = 32f
+) {
+    var iconState by remember { mutableStateOf(IconState.DEFAULT) }
+    val animatableSize = remember { Animatable(startValue) }
+    val coroutineScope = rememberCoroutineScope()
+    IconButton(
+        onClick = {
+            coroutineScope.launch {
+                if (iconState == IconState.DEFAULT) {
+                    animatableSize.animateTo(endValue, tween(durationMillis = 500))
+                    iconState = IconState.EXPANDED
+                    // Ensure the icon returns to its default size after expanding
+                    animatableSize.animateTo(startValue, tween(durationMillis = 500))
+                } else {
+                    animatableSize.animateTo(startValue, tween(durationMillis = 500))
+                    iconState = IconState.DEFAULT
+                }
+            }
+            onClick()
+        },
+        modifier = modifier
+            .size(max(animatableSize.value.dp, (startValue * 6).dp))
+            .zIndex(1f)
+    ) {
+        Image(
+            painter = painterResource(id = iconDrawable),
+            contentDescription = null,
+            modifier = Modifier.size(animatableSize.value.dp)
+        )
     }
 }
